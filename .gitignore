@@ -115,3 +115,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# My Directories
+Build/
+Backup/
+unit_output/
