@@ -28,7 +28,6 @@
 
 # Delphi compiler-generated binaries (safe to delete)
 *.exe
-*.dll
 *.bpl
 *.bpi
 *.dcp
@@ -117,6 +116,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # My Directories
-Build/
 Backup/
 unit_output/
