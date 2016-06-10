@@ -632,7 +632,6 @@ begin
   sock_addr.sin_port:= htons(Port);
   sock_addr.sin_addr.S_addr:= Address;
 
-  // если произошла ошибка и мы её не захендлели - приехали, коннект окончен
   Ret:= {$IFNDEF VER210}Winapi.{$ENDIF}Winsock.connect(SocketHandle, sock_addr, SizeOf(sock_addr));
   
   if not IsAsyncError(Ret) then

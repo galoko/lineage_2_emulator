@@ -25,11 +25,11 @@ var
   Client: TLineage2LoginClient;
 begin
   Client:= TLineage2LoginClient.Create;
-  Client.SetAddress('127.0.0.1');
+  Client.SetAddress('185.71.66.32');
   Client.Port:= TLineage2LoginClient.DEFAULT_LOGIN_PORT;
 
-  Client.Login:= 'gal';
-  Client.Password:= '1';
+  Client.Login:= 'testla2tools';
+  Client.Password:= 'qwerty';
 
   Client.OnConnect:= SocketConnect;
   Client.OnDisconnect:= SocketDisconnect;

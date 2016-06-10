@@ -11,26 +11,57 @@ uses
   Utils.L2Buffer, Utils.OpenSSL, Utils.LibGMP;
 
 type
+  /// <summary>
+  /// Simple wrapper for OpenSSL Blowfish module
+  /// </summary>
   TBlowfish = record
   strict private
     Key: BF_KEY;
   public
-    procedure SetKey(const Key: array of Byte); overload;
+    /// <summary>
+    /// Set blowfish key
+    /// </summary>
+    procedure SetKey(const Key: array of Byte);
+    /// <summary>
+    /// Performs data decoding using the Blowfish cbc algorithm without byte-order swapping.
+    /// BF_cbc_encrypt performs little-to-big endian swap so it's not working for us
+    /// </summary>
     procedure Decode(Data: PLineage2Buffer);
+    /// <summary>
+    /// Performs data encoding using the Blowfish cbc algorithm without byte-order swapping
+    /// BF_cbc_encrypt performs little-to-big endian swap so it's not working for us
+    /// </summary>
     procedure Encode(Data: PLineage2Buffer);
   end;
 
   TLoginCrypt = class
   strict private
     const
+      /// <summary>
+      /// Key that is used before client received a key from server Init packet
+      /// </summary>
 	    STATIC_BLOWFISH_KEY : array [0..16 - 1] of Byte = ($6b, $60, $cb, $5b, $82, $ce, $90, $b1, $cc, $2b, $6c, $55, $6c, $6c, $6c, $6c);
 
+      /// <summary>
+      /// Size of a checksum block
+      /// </summary>
       ChecksumBlockSize = SizeOf(Integer);
 
     var
+      /// <summary>
+      /// Blowfish context used to encrypt/decrypt packets
+      /// </summary>
       Blowfish: TBlowfish;
+      /// <summary>
+      /// This flag determine type of key which is in use by now and
+      /// it also determines the type of a second decryption pass
+      /// </summary>
       IsStatic: Boolean;
 
+      /// <summary>
+      /// Public key is used to encrypt login-password pair before it would be sent to server.
+      /// The key is received from Init packet
+      /// </summary>
       RSAPublicKey: TArray<Byte>;
 
     function decXORPass(Data: PLineage2Buffer) : Boolean;
@@ -191,7 +222,7 @@ begin
   DataPtr:= Data.GetReadPtr;
   DataLen:= Data.ReadRemaining;
 
-  // not padded or less than required for retrieve a key and read something after this
+  // not padded or less than required to retrieve a key and read something after that
   if (DataLen mod 8 <> 0) or (DataLen <= KeyPosFromEnd) then
     Exit(False);
 
